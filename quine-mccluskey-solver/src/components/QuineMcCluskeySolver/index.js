@@ -25,6 +25,9 @@ export default function QuineMcCluskeySolver() {
     setCurrentStep(0);
     setError('');
     setMaxterms([]);
+  };
+
+  const clearInput = () => {
     setMinterms(''); 
     setVariables('');
   };
@@ -120,6 +123,7 @@ export default function QuineMcCluskeySolver() {
         setVariables={setVariables}
         solveQuineMcCluskey={solveQuineMcCluskey}
         resetSolver={resetSolver}
+        clearInput={clearInput}
       />
       
       {error && (

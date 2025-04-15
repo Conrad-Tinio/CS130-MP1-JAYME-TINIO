@@ -53,14 +53,14 @@
 
 .solve-button {
   padding: 0.5rem 1rem; /* px-4 py-2 */
-  background-color: #2563eb; /* bg-blue-600 */
+  background-color: #0f982d; /* bg-blue-600 */
   color: white; /* text-white */
   border-radius: 0.25rem; /* rounded */
   border: none;
 }
 
 .solve-button:hover {
-  background-color: #1d4ed8; /* hover:bg-blue-700 */
+  background-color: #02831e; /* hover:bg-blue-700 */
 }
 
 .reset-button {
@@ -74,6 +74,19 @@
 
 .reset-button:hover {
   background-color: #c50000; /* hover:bg-blue-700 */
+}
+
+.clear-button {
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  margin-left: 10px;
+  background-color: #e2971e; /* bg-blue-600 */
+  color: white; /* text-white */
+  border-radius: 0.25rem; /* rounded */
+  border: none; 
+}
+
+.clear-button:hover {
+  background-color: #ce8510; /* hover:bg-blue-700 */
 }
 
 /* Error message */
