@@ -25,6 +25,8 @@ export default function QuineMcCluskeySolver() {
     setCurrentStep(0);
     setError('');
     setMaxterms([]);
+    setMinterms(''); 
+    setVariables('');
   };
 
   // Solve using Quine-McCluskey algorithm
@@ -117,6 +119,7 @@ export default function QuineMcCluskeySolver() {
         variables={variables} 
         setVariables={setVariables}
         solveQuineMcCluskey={solveQuineMcCluskey}
+        resetSolver={resetSolver}
       />
       
       {error && (

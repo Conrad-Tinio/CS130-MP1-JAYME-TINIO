@@ -56,10 +56,24 @@
   background-color: #2563eb; /* bg-blue-600 */
   color: white; /* text-white */
   border-radius: 0.25rem; /* rounded */
+  border: none;
 }
 
 .solve-button:hover {
   background-color: #1d4ed8; /* hover:bg-blue-700 */
+}
+
+.reset-button {
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  margin-left: 10px;
+  background-color: #e22b1e; /* bg-blue-600 */
+  color: white; /* text-white */
+  border-radius: 0.25rem; /* rounded */
+  border: none; 
+}
+
+.reset-button:hover {
+  background-color: #c50000; /* hover:bg-blue-700 */
 }
 
 /* Error message */
