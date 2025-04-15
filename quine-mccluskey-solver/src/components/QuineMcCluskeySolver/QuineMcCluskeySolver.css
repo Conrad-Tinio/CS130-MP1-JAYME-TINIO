@@ -122,8 +122,10 @@
 }
 
 .nav-button {
+  height: 35px;
   padding: 0.25rem 0.75rem; /* px-3 py-1 */
   border-radius: 0.25rem; /* rounded */
+  border: none;
 }
 
 .nav-button-enabled {
