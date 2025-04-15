@@ -30,6 +30,10 @@ export default function QuineMcCluskeySolver() {
   const clearInput = () => {
     setMinterms(''); 
     setVariables('');
+
+    if(!minterms.trim()) {
+      setError('There is nothing to clear.')
+    }
   };
 
   const newFunction = () => {
