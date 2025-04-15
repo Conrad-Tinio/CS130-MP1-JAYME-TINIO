@@ -5,7 +5,8 @@ export default function InputSection({
   setMinterms, 
   variables, 
   setVariables, 
-  solveQuineMcCluskey 
+  solveQuineMcCluskey, 
+  resetSolver
 }) {
   return (
     <div>
@@ -39,9 +40,14 @@ export default function InputSection({
       <div className="button-container">
         <button
           onClick={solveQuineMcCluskey}
-          className="solve-button"
-        >
+          className="solve-button">
           Solve
+        </button>
+
+        <button
+          onClick={resetSolver}
+          className="reset-button">
+          Reset
         </button>
       </div>
     </div>
