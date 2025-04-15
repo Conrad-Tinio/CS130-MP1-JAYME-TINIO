@@ -114,6 +114,26 @@
   font-weight: 600;
 }
 
+.new-function-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.new-function-button {
+  height: 33px;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: rgb(154, 1, 154);
+  color: white;
+  padding: 0.25rem 0.75rem;
+}
+
+.new-function-button:hover {
+  cursor: pointer;
+  background-color: rgb(120, 2, 120);
+}
+
 /* Step navigation */
 .step-navigation {
   display: flex;

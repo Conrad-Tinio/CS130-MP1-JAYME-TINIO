@@ -9,13 +9,18 @@ export default function ResultsDisplay({
   results, 
   maxterms, 
   currentStep, 
-  setCurrentStep 
+  setCurrentStep, 
+  newFunction
 }) {
   return (
     <div className="results-container">
       <div className="results-intro">
         <p className="font-semibold">For POS form, we'll find the minimal product of sums using the maxterms.</p>
         <p>Maxterms: {maxterms.join(', ')}</p>
+      </div>
+      
+      <div className='new-function-container'>
+      <button className='new-function-button' onClick={newFunction} >New Function</button>
       </div>
       
       {/* Step Navigation */}

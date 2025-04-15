@@ -32,6 +32,15 @@ export default function QuineMcCluskeySolver() {
     setVariables('');
   };
 
+  const newFunction = () => {
+    setResults(null);
+    setCurrentStep(0);
+    setError('');
+    setMaxterms([]);
+    setMinterms(''); 
+    setVariables('');
+  }
+
   // Solve using Quine-McCluskey algorithm
   const solveQuineMcCluskey = () => {
     resetSolver();
@@ -138,6 +147,7 @@ export default function QuineMcCluskeySolver() {
           maxterms={maxterms}
           currentStep={currentStep}
           setCurrentStep={setCurrentStep}
+          newFunction={newFunction}
         />
       )}
     </div>
