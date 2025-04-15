@@ -12,14 +12,15 @@ import {
 import './QuineMcCluskeySolver.css';
 
 export default function QuineMcCluskeySolver() {
-  const [minterms, setMinterms] = useState('');
-  const [variables, setVariables] = useState('');
-  const [maxterms, setMaxterms] = useState([]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [results, setResults] = useState(null);
-  const [error, setError] = useState('');
+  // Initialize the constants to be used 
+  const [minterms, setMinterms] = useState('');         // Stores the user input for minterms (e.g. 1,2,3)
+  const [variables, setVariables] = useState('');       // Stores the user input for variables (e.g. ABC)
+  const [maxterms, setMaxterms] = useState([]);         // Stores the calculated maxterms (the complement of the minterms)
+  const [currentStep, setCurrentStep] = useState(0);    // Stores the current step of the process (from 0-5 based on our whole implementation)
+  const [results, setResults] = useState(null);         // Stores the calculated results based on the Quine-McCluskey Algorithm
+  const [error, setError] = useState('');               // Stores the error messages for invalid inputs or actions
   
-  // Reset to initial state
+  // Reset Function: Clears the results only
   const resetSolver = () => {
     setResults(null);
     setCurrentStep(0);
@@ -27,15 +28,18 @@ export default function QuineMcCluskeySolver() {
     setMaxterms([]);
   };
 
+  // Clear Function: Clears the inputs only
   const clearInput = () => {
     setMinterms(''); 
     setVariables('');
 
-    if(!minterms.trim()) {
+    // If there are no inputs, print this error message
+    if(!minterms.trim() && !variables.trim()) {
       setError('There is nothing to clear.')
     }
   };
 
+  // New Function: Clears all inputs and results
   const newFunction = () => {
     setResults(null);
     setCurrentStep(0);
@@ -45,23 +49,30 @@ export default function QuineMcCluskeySolver() {
     setVariables('');
   }
 
-  // Solve using Quine-McCluskey algorithm
+  // Function for solving the Quine-McCluskey in (POS) Form
   const solveQuineMcCluskey = () => {
     resetSolver();
     
     try {
-      // Validate inputs
+      // Validate the minterms input
       if (!minterms.trim()) {
         setError('Please enter minterms.');
         return;
       }
       
+      // Validate the variables input
       if (!variables.trim()) {
         setError('Please enter variables.');
         return;
       }
       
-      const mintermList = minterms.split(',').map(t => parseInt(t.trim(), 10));
+      // Splits the user minterm inputs separated by commas into an array of strings
+      // The map then iterates through each term from the array (from the splitting)
+      // Each of the term is is them trimmed off any trailing whitespaces and converted to an integer of base 10
+      const mintermList = minterms.split(',').map(term => parseInt(term.trim(), 10));
+
+      // Splits the user variable inputs trims leading/trailing whitespaces
+      // The split strings are then stored in an array
       const variableList = variables.trim().split('');
       
       // Check for valid minterms
@@ -70,19 +81,19 @@ export default function QuineMcCluskeySolver() {
         return;
       }
       
-      // Check for consistent number of variables
+      // Variable Consistency: This block checks if the minterms are within the valid range of the variables
+      // This applies the concept of: with n variables, we are expected to have [2^n - 1] valid minterms
       const numVars = variableList.length;
       const maxPossibleValue = Math.pow(2, numVars) - 1;
-      
       if (mintermList.some(t => t < 0 || t > maxPossibleValue)) {
         setError(`With ${numVars} variables, minterms must be between 0 and ${maxPossibleValue}.`);
         return;
       }
       
-      // For POS, we need maxterms (the complement of minterms)
-      const allTerms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);
-      const maxtermList = allTerms.filter(t => !mintermList.includes(t));
-      setMaxterms(maxtermList);
+      // NOTE: For the POS Form, we need to get the Maxterms (complement of the Minterms)
+      const allTerms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);   // Creates an array of all the possible terms 
+      const maxtermList = allTerms.filter(term => !mintermList.includes(term));     // Filters all the terms by EXCLUDING minterms
+      setMaxterms(maxtermList);                                                     // Stores the maxterms 
       
       // Step 1: Convert to binary and group by number of ones
       const binaryTerms = convertToBinary(maxtermList, numVars);
