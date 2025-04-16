@@ -13,9 +13,7 @@ export default function InputSection({
     <div>
       <div className="input-grid">
         <div>
-          <label className="input-label">
-            Minterms (comma separated)
-          </label>
+          <label className="input-label"> Minterms (comma separated) </label>
           <input
             type="text"
             value={minterms}
@@ -25,9 +23,7 @@ export default function InputSection({
           />
         </div>
         <div>
-          <label className="input-label">
-            Variables (one letter each)
-          </label>
+          <label className="input-label"> Variables (one letter each) </label>
           <input
             type="text"
             value={variables}

@@ -1,9 +1,9 @@
 import React from 'react';
-import Step1 from './Steps/Step1';
-import Step2 from './Steps/Step2';
-import Step3 from './Steps/Step3';
-import Step4 from './Steps/Step4';
-import Step5 from './Steps/Step5';
+import Step1 from './steps/step1';
+import Step2 from './steps/step2';
+import Step3 from './steps/step3';
+import Step4 from './steps/step4';
+import Step5 from './steps/step5';
 
 export default function ResultsDisplay({ 
   results, 

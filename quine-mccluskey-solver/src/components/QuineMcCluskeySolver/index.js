@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InputSection from './InputSection';
 import ResultsDisplay from './ResultsDisplay';
 import {
-  convertToBinary,
+  convertMaxtermsToBinary,
   groupByOnes,
   findPrimeImplicants,
   createPrimeImplicantChart,
@@ -96,7 +96,7 @@ export default function QuineMcCluskeySolver() {
       setMaxterms(maxtermList);                                                     // Stores the maxterms 
       
       // Step 1: Convert to binary and group by number of ones
-      const binaryTerms = convertToBinary(maxtermList, numVars);
+      const binaryTerms = convertMaxtermsToBinary(maxtermList, numVars);
       const groups = groupByOnes(binaryTerms);
       
       // Step 2: Find prime implicants
