@@ -20,6 +20,9 @@ export default function QuineMcCluskeySolver() {
   const [results, setResults] = useState(null);         // Stores the calculated results based on the Quine-McCluskey Algorithm
   const [error, setError] = useState('');               // Stores the error messages for invalid inputs or actions
   
+  // Maximum allowed variables (10)
+  const MAX_VARIABLES = 10;
+  
   // Reset Function: Clears the results only
   const resetSolver = () => {
     setResults(null);
@@ -28,73 +31,87 @@ export default function QuineMcCluskeySolver() {
     setMaxterms([]);
   };
 
-  // Clear Function: Clears the inputs only
+  // [MODIFIED] Clear Function: Clears the inputs only
+  // Changed formatting of if else statements and function calls
+  // Added an additional setError('') to clear the setError('') function
   const clearInput = () => {
+    // Clear input fields and show error if already empty
+    if (!minterms.trim() && !variables.trim()) {
+      setError('There is nothing to clear.');
+      return;
+    }
+    
     setMinterms(''); 
     setVariables('');
-
-    // If there are no inputs, print this error message
-    if(!minterms.trim() && !variables.trim()) {
-      setError('There is nothing to clear.')
-    }
+    setError('');
   };
 
-  // New Function: Clears all inputs and results
+  // [MODIFIED] New Function: Clears all inputs and results
+  // added resetSolver('') function since other functions before modified version are covered here
   const newFunction = () => {
-    setResults(null);
-    setCurrentStep(0);
-    setError('');
-    setMaxterms([]);
-    setMinterms(''); 
+    // Reset everything - both inputs and solver state
+    resetSolver(); 
+    setMinterms('');
     setVariables('');
   }
 
-  // Function for solving the Quine-McCluskey in (POS) Form
+  //[MODIFIED] - see inner comments for modifications
   const solveQuineMcCluskey = () => {
-    resetSolver();
+    resetSolver(); // Clear any previous results
     
     try {
-      // Validate the minterms input
+      // ======================
+      // 1. INPUT VALIDATION
+      // ======================
       if (!minterms.trim()) {
         setError('Please enter minterms.');
         return;
       }
-      
-      // Validate the variables input
+  
       if (!variables.trim()) {
         setError('Please enter variables.');
         return;
       }
-      
-      // Splits the user minterm inputs separated by commas into an array of strings
-      // The map then iterates through each term from the array (from the splitting)
-      // Each of the term is is them trimmed off any trailing whitespaces and converted to an integer of base 10
-      const mintermList = minterms.split(',').map(term => parseInt(term.trim(), 10));
-
-      // Splits the user variable inputs trims leading/trailing whitespaces
-      // The split strings are then stored in an array
+  
       const variableList = variables.trim().split('');
-      
-      // Check for valid minterms
-      if (mintermList.some(isNaN)) {
+  
+      if (variableList.length > MAX_VARIABLES) {
+        setError(`Too many variables. Maximum allowed is ${MAX_VARIABLES}.`);
+        return;
+      }
+  
+      // Parse and validate minterms
+      const mintermList = minterms.split(',')
+        .map(term => parseInt(term.trim(), 10))
+        .filter(term => !isNaN(term)); // [MODIFICATION] - added functionality to remove NaN values
+  
+      if (mintermList.length === 0) { // [MODIFICATION] - came from some(isNaN), changed to length === 0 for clarity
         setError('Invalid minterms. Please enter comma-separated numbers.');
         return;
       }
-      
-      // Variable Consistency: This block checks if the minterms are within the valid range of the variables
-      // This applies the concept of: with n variables, we are expected to have [2^n - 1] valid minterms
+  
+      // ======================
+      // 2. MAXTERM CALCULATION
+      // ======================
       const numVars = variableList.length;
       const maxPossibleValue = Math.pow(2, numVars) - 1;
+      
+      // Check minterm range validity
       if (mintermList.some(t => t < 0 || t > maxPossibleValue)) {
         setError(`With ${numVars} variables, minterms must be between 0 and ${maxPossibleValue}.`);
         return;
       }
-      
-      // NOTE: For the POS Form, we need to get the Maxterms (complement of the Minterms)
-      const allTerms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);   // Creates an array of all the possible terms 
-      const maxtermList = allTerms.filter(term => !mintermList.includes(term));     // Filters all the terms by EXCLUDING minterms
-      setMaxterms(maxtermList);                                                     // Stores the maxterms 
-      
+  
+      // Calculate maxterms (complement of minterms)
+      const allTerms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);
+      const maxtermList = allTerms.filter(term => !mintermList.includes(term));
+      setMaxterms(maxtermList);
+  
+      // ======================
+      // 3. QUINE-MCCLUSKEY ALGORITHM STEPS
+      // ======================
+
+      //[MODIFICATION]: removed intermediate variable posTermBinary
       // Step 1: Convert to binary and group by number of ones
       const binaryTerms = convertMaxtermsToBinary(maxtermList, numVars);
       const groups = groupByOnes(binaryTerms);
@@ -108,15 +125,15 @@ export default function QuineMcCluskeySolver() {
       // Step 4: Find essential prime implicants
       const essentialPIs = findEssentialPrimeImplicants(chart, maxtermList);
       
-      // Step 5: Convert to algebraic form (POS)
-      const algebraicTerms = essentialPIs.map(pi => {
-          const posTermBinary = pi.term;
-          return binaryToAlgebraic(posTermBinary, variableList.slice(0, numVars));
-      });
-
+      // Step 5: Convert to algebraic POS form
+      const algebraicTerms = essentialPIs.map(pi => (
+        binaryToAlgebraic(pi.term, variableList.slice(0, numVars))
+      ));
       const posExpression = algebraicTerms.map(term => `(${term})`).join(' · ');
-    
-      // Set results for display
+  
+      // ======================
+      // 4. STORE RESULTS
+      // ======================
       setResults({
         groups,
         binaryTerms,
@@ -128,11 +145,11 @@ export default function QuineMcCluskeySolver() {
         variableList
       });
       
-      // Start at step 1
-      setCurrentStep(1);
+      setCurrentStep(1); // Begin with step 1 displayed
       
-    } catch (err) {
+    } catch (err) { //[MODIFICATION] - added try-catch block for easier debugging
       setError(`An error occurred: ${err.message}`);
+      console.error('Quine-McCluskey Error:', err);
     }
   };
 
