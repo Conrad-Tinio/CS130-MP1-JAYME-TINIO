@@ -1,9 +1,13 @@
 import React from 'react';
+import { FaCheck } from "react-icons/fa6";
 
 export default function Step5({ posExpression }) {
   return (
     <div>
-      <h2 className="step-heading">Step 5: Minimized POS Expression</h2>
+      <h2 className="step-heading">
+        <FaCheck className="step-icon" />
+        Step 5: Minimized POS Expression
+      </h2>
       <p className="step-description">For Product of Sums (POS), we take the complement of each term in the prime implicants:</p>
       
       <div className="result-expression">

@@ -1,224 +1,596 @@
-/* Container styles */
+/* 
+MAJOR CHANGES FROM PREVIOUS CSS:
+1. Added custom fonts with @font-face
+2. Complete color scheme change to a dark purple/violet theme
+3. Added background image and styling for body
+4. Enhanced UI with glow effects, animations, and shadows
+5. More detailed styling for chart visualizations
+6. Improved responsive design and spacing
+7. Added icon support in buttons
+8. Refined button styles with hover effects and transitions
+*/
+
+/* Custom Font Definitions - MODIFIED */
+@font-face {
+  font-family: Audiowide-Regular;
+  src: url(fonts/Audiowide-Regular.ttf);
+}
+
+@font-face {
+  font-family: Oxanium-Regular;
+  src: url(fonts/Oxanium-Regular.ttf);
+}
+
+/* Base Styles - UPDATED with dark theme */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #0a0015;
+  background-image: url("images/bg-image1.png");
+  background-size: cover;
+  min-height: 100vh;
+  color: #e9d8ff;
+  font-family: Oxanium-Regular;
+}
+
+button, input {
+  font-family: Oxanium-Regular;
+}
+
+/* Container Styles - UPDATED */
 .solver-container {
   max-width: 64rem; 
   margin-left: auto;
   margin-right: auto;
   padding: 1.5rem; 
-  background-color: #f9fafb; 
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+  border-radius: 1rem; /* Increased from 0.5rem */
+  color: #e9d8ff;
+  font-family: Oxanium-Regular;
+  /* Removed background color and box-shadow */
 }
 
+.content-wrapper {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+/* Title Styles - UPDATED */
 .solver-title {
-  font-size: 1.5rem;
+  font-size: 1.75rem; /* Increased from 1.5rem */
   font-weight: 700; 
   text-align: center;
-  margin-bottom: 1.5rem; 
+  margin-bottom: 2rem; /* Increased from 1.5rem */
+  color: #d8b4fe; /* Changed from default black */
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); /* MODIFIED: added glow effect */
+  font-family: Audiowide-Regular; /* MODIFIED: custom font */
 }
 
-/* Input section */
+/* Input Section - UPDATED */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem; 
+  gap: 2.5rem; /* Increased from 1rem */
+  margin-bottom: 2.5rem; /* Increased from 1.5rem */
 }
 
 @media (min-width: 768px) {
   .input-grid {
-    grid-template-columns: 1fr 1fr; 
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem; /* MODIFIED: separate column and row gap */
+    row-gap: 2rem;
   }
 }
 
 .input-label {
   display: block;
-  font-size: 0.875rem; 
-  font-weight: 500; 
-  color: #374151; 
-  margin-bottom: 0.25rem; 
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #c4b5fd; /* Changed from #374151 */
+  margin-bottom: 0.75rem; /* Increased from 0.25rem */
 }
 
 .input-field {
   width: 100%;
-  padding: 0.5rem; 
-  border: 1px solid #d1d5db; 
-  border-radius: 0.25rem; 
+  padding: 0.75rem; /* Increased from 0.5rem */
+  border: 1px solid #6d28d9; /* Changed from #d1d5db */
+  border-radius: 2rem; /* Significantly increased from 0.25rem */
+  background-color: #1e1333; /* MODIFIED: dark background */
+  color: #e9d8ff; /* MODIFIED: light text */
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); /* MODIFIED: glow effect */
 }
 
+.input-field:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe; /* MODIFIED: focus effect */
+}
+
+.input-group {
+  margin-bottom: 1.5rem; /* MODIFIED */
+}
+
+/* Button Styles - UPDATED */
 .button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem; 
+  margin-bottom: 2rem; /* Increased from 1.5rem */
+  margin-top: 1.5rem; /* MODIFIED */
 }
 
 .solve-button {
-  padding: 0.5rem 1rem; 
-  background-color: #0f982d;
-  color: white; 
-  border-radius: 0.25rem; 
+  padding: 0.75rem 1.5rem; /* Increased from 0.5rem 1rem */
+  background-color: #8b5cf6; /* Changed from #0f982d */
+  color: white;
+  border-radius: 2rem; /* Increased from 0.25rem */
   border: none;
+  font-weight: 600; /* MODIFIED */
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); /* NEW */
+  transition: all 0.3s ease; /* MODIFIED */
 }
 
 .solve-button:hover {
-  background-color: #02831e;
-}
-
-.reset-button {
-  padding: 0.5rem 1rem; 
-  margin-left: 10px;
-  background-color: #e22b1e; 
-  color: white; 
-  border-radius: 0.25rem; 
-  border: none; 
-}
-
-.reset-button:hover {
-  background-color: #c50000; 
+  background-color: #7c3aed; /* Changed from #02831e */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.7); /* MODIFIED */
+  transform: translateY(-2px); /* MODIFIED */
 }
 
 .clear-button {
-  padding: 0.5rem 1rem;
-  margin-left: 10px;
-  background-color: #e2971e; 
-  color: white; 
-  border-radius: 0.25rem; 
-  border: none; 
+  padding: 0.75rem 1.5rem; /* Increased from 0.5rem 1rem */
+  margin-left: 15px; /* Increased from 10px */
+  background-color: #743ef1; /* Changed from #e2971e */
+  color: white;
+  border-radius: 2rem; /* Increased from 0.25rem */
+  border: none;
+  font-weight: 600; /* MODIFIED */
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); /* MODIFIED */
+  transition: all 0.3s ease; /* MODIFIED */
 }
 
 .clear-button:hover {
-  background-color: #ce8510;
+  background-color: #5815f3; /* Changed from #ce8510 */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* MODIFIED */
+  transform: translateY(-2px); /* MODIFIED */
 }
 
-/* Error message */
+.reset-button {
+  padding: 0.75rem 1.5rem; /* Increased from 0.5rem 1rem */
+  margin-left: 15px; /* Increased from 10px */
+  background-color: #5815f3; /* Changed from #e22b1e */
+  color: white;
+  border-radius: 2rem; /* Increased from 0.25rem */
+  border: none;
+  font-weight: 600; /* NEW */
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); /* MODIFIED */
+  transition: all 0.3s ease; /* MODIFIED*/
+}
+
+.reset-button:hover {
+  background-color: #4b05f1cc; /* Changed from #c50000 */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* MODIFIED*/
+  transform: translateY(-2px); /* MODIFIED */
+}
+
+/* Error Message - UPDATED */
 .error-message {
-  margin-bottom: 1.5rem; 
-  padding: 1rem; 
-  background-color: #fee2e2; 
-  color: #991b1b; 
-  border-radius: 0.25rem; 
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(248, 113, 113, 0.1); /* Changed from #fee2e2 */
+  color: #f87171; /* Changed from #991b1b */
+  border-radius: 0.5rem;
+  border: 1px solid #ef4444; /* MODIFIED */
 }
 
-/* Results section */
+/* Results Section - UPDATED */
 .results-container {
-  background-color: white; 
-  padding: 1rem; 
-  border-radius: 0.25rem; 
-  border: 1px solid #e5e7eb; 
+  background-color: #1e1333; /* Changed from white */
+  padding: 1.5rem; /* Increased from 1rem */
+  border-radius: 0.75rem; /* Increased from 0.25rem */
+  border: 1px solid #6d28d9; /* Changed from #e5e7eb */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); /* MODIFIED */
 }
 
 .results-intro {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem; /* Increased from 1rem */
+  color: #ddd6fe; /* MODIFIED */
 }
 
 .font-semibold {
   font-weight: 600;
+  color: #c4b5fd; /* MODIFIED */
 }
 
+/* Function Button - UPDATED */
 .new-function-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem; /* Increased from 1rem */
 }
 
 .new-function-button {
-  height: 33px;
+  height: 38px; /* Increased from 33px */
   border: none;
-  border-radius: 0.25rem;
-  background-color: rgb(154, 1, 154);
+  border-radius: 2rem; /* Increased from 0.25rem */
+  background-color: #a855f7; /* Changed from rgb(154, 1, 154) */
   color: white;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1.25rem; /* Changed from 0.25rem 0.75rem */
+  font-weight: 600; /* NEW */
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); /* MODIFIED */
+  transition: all 0.3s ease; /* MODIFIED */
 }
 
 .new-function-button:hover {
   cursor: pointer;
-  background-color: rgb(120, 2, 120);
+  background-color: #9333ea; /* Changed from rgb(120, 2, 120) */
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.7); /* MODIFIED */
+  transform: translateY(-2px); /* MODIFIED */
 }
 
-/* Step navigation */
+/* Navigation - COMPLETELY REDESIGNED */
 .step-navigation {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem; /* Increased from 1rem */
+  gap: 1rem;
+  width: 100%;
+  height: 48px; /* MODIFIED: Fixed height container */
+}
+
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 120px; /* MODIFIED: Fixed width to match nav-button */
+}
+
+.step-counter {
+  text-align: center;
+  font-weight: 500;
+  color: #d8b4fe; /* MODIFIED */
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .nav-button {
-  height: 35px;
-  padding: 0.25rem 0.75rem; 
-  border-radius: 0.25rem; 
+  width: 120px; /* MODIFIED */
+  height: 38px; /* Increased from 35px */
+  padding: 1rem 1rem; /* Changed from 0.25rem 0.75rem */
+  border-radius: 2rem; /* Increased from 0.25rem */
   border: none;
+  font-weight: 600; /* MODIFIED */
+  transition: all 0.3s ease; /* MODIFIED */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .nav-button-enabled {
-  background-color: #2563eb;
+  background-color: #8b5cf6; /* Changed from #2563eb */
   color: white;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); /* MODIFIED */
+  cursor: pointer;
 }
 
 .nav-button-enabled:hover {
-  background-color: #1d4ed8; 
+  background-color: #7c3aed; /* Changed from #1d4ed8 */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); /* MODIFIED */
+  transform: translateY(-2px); /* NEW */
 }
 
 .nav-button-disabled {
-  background-color: #d1d5db; 
+  background-color: #3f3756; /* Changed from #d1d5db */
+  color: #9ca3af; /* MODIFIED */
+  cursor: not-allowed; /* MODIFIED */
 }
 
-.font-medium {
-  font-weight: 500;
-}
-
-/* Tables */
+/* Table Styles - UPDATED */
 .table-container {
   overflow-x: auto;
+  margin-bottom: 1.5rem; /* MODFIED */
+  box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe; /* MODIFIED */
 }
 
 .full-width-table {
   min-width: 100%;
   border-collapse: collapse;
-  border: 1px solid #d1d5db; 
+  border: 1px solid #d8b4fe; /* Changed from #d1d5db */
 }
 
 .table-header {
-  background-color: #f3f4f6;
+  background-color: #2e1c4a; /* Changed from #f3f4f6 */
 }
 
 .table-cell {
-  border: 1px solid #d1d5db;
-  padding: 0.5rem 1rem; 
+  border: 1px solid #d8b4fe; /* Changed from #d1d5db */
+  padding: 0.75rem 1rem; /* Increased from 0.5rem 1rem */
+  color: #ddd6fe; /* MODIFIED */
 }
 
 .font-mono {
-  font-family: monospace;
+  color: #a5b4fc; /* MODIFIED */
 }
 
-.text-center {
-  text-align: center;
-}
-
-/* Step 5 */
+/* Result Styles - UPDATED */
 .result-expression {
-  background-color: #f3f4f6; 
-  padding: 1rem; 
-  border-radius: 0.25rem; 
-  margin-bottom: 1rem; 
+  background-color: #2e1c4a; /* Changed from #f3f4f6 */
+  padding: 1.5rem; /* Increased from 1rem */
+  border-radius: 0.75rem; /* Increased from 0.25rem */
+  margin-bottom: 1.5rem; /* Increased from 1rem */
+  border: 1px solid #7c3aed; /* NEW */
+  box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe; /* MODIFIED */
 }
 
 .expression-text {
-  font-size: 1.25rem;
-  font-family: monospace; 
-  margin-top: 0.5rem; 
+  font-size: 3rem; /* Increased from 1.25rem */
+  margin-top: 0.75rem; /* Increased from 0.5rem */
+  color: #a5b4fc; /* MODIFIED */
+  margin-bottom: 1rem; /* MODIFIED */
 }
 
 .note-text {
-  font-size: 0.875rem; 
-  color: #4b5563; 
+  font-size: 0.875rem;
+  color: #a1a1aa; /* Changed from #4b5563 */
 }
 
-/* Step headings */
+/* Step Styles - UPDATED */
 .step-heading {
-  font-size: 1.25rem; 
-  font-weight: 600; 
-  margin-bottom: 0.75rem;
+  font-size: 1.375rem; /* Increased from 1.25rem */
+  font-weight: 600;
+  margin-bottom: 1rem; /* Increased from 0.75rem */
+  color: #d8b4fe; /* MODIFIED */
 }
 
 .step-description {
-  margin-bottom: 0.75rem; 
+  margin-bottom: 1rem; /* Increased from 0.75rem */
+  color: #ddd6fe; /* MODFIED */
+}
+
+/* MODIFIED: Visualization Styles */
+.visualization-container {
+  background-color: #1e1333;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #6d28d9;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.chart-title {
+  color: #d8b4fe;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* MODIFIED: Dashboard Card Styles */
+.dashboard-card {
+  background-color: #1e1333;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #6d28d9;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+/* MODIFIED: Utility Classes */
+.glow-text {
+  color: #d8b4fe;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+}
+
+.glow-border {
+  border: 1px solid #8b5cf6;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+/* MODIFIED: Progress Bar */
+.progress-container {
+  height: 8px;
+  background-color: #2e1c4a;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #d8b4fe);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* MODIFIED: Animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+/* MODIFIED: Chart/Grid Visualization */
+.chart-outer-container {
+  position: relative;
+  border: 2px solid #6d28d9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  scrollbar-color: #8b5cf6 #1e1333;
+  scrollbar-width: thin;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  display: table;
+}
+
+.implicant-grid {
+  display: table-row-group;
+}
+
+.chart-header-row {
+  display: table-row;
+}
+
+.chart-header-empty {
+  display: table-cell;
+  width: 80px;
+  min-width: 80px;
+  padding-bottom: 8px;
+}
+
+.chart-header-number {
+  display: table-cell;
+  text-align: center;
+  min-width: 50px;
+  padding-bottom: 8px;
+}
+
+.implicant-row {
+  display: table-row;
+}
+
+.binary-cell {
+  display: table-cell;
+  width: 80px;
+  min-width: 80px;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+.chart-cell {
+  display: table-cell;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  border-width: 2px;
+}
+
+.dashed-border {
+  border-style: dashed;
+}
+
+.solid-border {
+  border-style: solid;
+}
+
+.x-mark {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* MODIFIED: Responsive Adjustments for Chart */
+@media (max-width: 640px) {
+  .chart-cell {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  
+  .binary-cell {
+    width: 60px;
+    min-width: 60px;
+  }
+  
+  .chart-header-empty {
+    width: 60px;
+    min-width: 60px;
+  }
+  
+  .x-mark {
+    font-size: 20px;
+  }
+}
+
+/* MODIFIED: Custom Scrollbar Styles */
+.chart-outer-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.chart-outer-container::-webkit-scrollbar-track {
+  background: #1e1333;
+  border-radius: 0;
+}
+
+.chart-outer-container::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border: 1px solid #6d28d9;
+  border-radius: 4px;
+}
+
+/* MODIFIED: Icon Support */
+.button-container .icon {
+  margin-right: 8px;
+  vertical-align: middle;
+  font-size: 0.9em;
+}
+
+.button-icon {
+  margin: 0 0.3em;
+  vertical-align: middle;
+}
+
+/* MODIFIED: Icon styles for buttons */
+.nav-button svg,
+.new-function-button svg {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.9em;
+}
+
+/* Left-side icons (for Previous Step button) */
+.nav-button svg:first-child {
+  margin-right: 8px;
+}
+
+/* Right-side icons (for Next Step button) */
+.nav-button svg:last-child {
+  margin-left: 8px;
+}
+
+/* Icon for the New Function button */
+.new-function-button svg {
+  margin-right: 8px;
+}
+
+/* Fix for vertical alignment in buttons */
+.nav-button,
+.new-function-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* For better appearance on smaller screens */
+@media (max-width: 640px) {
+  .nav-button svg,
+  .new-function-button svg {
+    font-size: 0.8em;
+  }
+}
+
+/* MODIFIED: Step icon style */
+.step-icon {
+  font-size: 1.2em;
+  color: #d8b4fe;
+  margin-right: 8px;
 }

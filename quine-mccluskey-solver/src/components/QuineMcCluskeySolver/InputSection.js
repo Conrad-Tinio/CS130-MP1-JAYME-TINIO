@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaPlay, FaEraser, FaUndo } from 'react-icons/fa'; // Importing icons from Font Awesome
 
 export default function InputSection({ 
   minterms, 
@@ -38,21 +39,20 @@ export default function InputSection({
         <button
           onClick={solveQuineMcCluskey}
           className="solve-button">
-          Solve
+          <FaPlay className="icon" /> Solve
         </button>
 
         <button
           onClick={clearInput}
           className="clear-button">
-          Clear
+          <FaEraser className="icon" /> Clear
         </button>
         
         <button
           onClick={resetSolver}
           className="reset-button">
-          Reset
+          <FaUndo className="icon" /> Reset
         </button>
-
       </div>
     </div>
   );

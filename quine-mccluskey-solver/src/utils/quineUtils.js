@@ -150,7 +150,7 @@ export const findEssentialPrimeImplicants = (chart, maxterms) => {
   });
   
   // Second pass: Greedy coverage for remaining terms
-  const remainingMaxterms = maxterms.filter(mt => !coveredMaxterms.has(mt));
+  let remainingMaxterms = maxterms.filter(mt => !coveredMaxterms.has(mt)); //[MODIFIED] - changed const to let
   const remainingPIs = Object.keys(chart)
     .filter(pi => !essentialPIs.includes(pi))
     .sort((a, b) => 

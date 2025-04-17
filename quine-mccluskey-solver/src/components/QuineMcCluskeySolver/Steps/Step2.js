@@ -1,9 +1,13 @@
 import React from 'react';
+import { GoPencil } from "react-icons/go";
 
 export default function Step2({ primeImplicants }) {
   return (
     <div>
-      <h2 className="step-heading">Step 2: Finding Prime Implicants</h2>
+      <h2 className="step-heading">
+        <GoPencil className="step-icon" /> 
+        Step 2: Finding Prime Implicants
+        </h2>
       <p className="step-description">We combine terms that differ by exactly one bit position:</p>
       <div className="table-container">
         <table className="full-width-table">
@@ -11,7 +15,7 @@ export default function Step2({ primeImplicants }) {
             <tr className="table-header">
               <th className="table-cell">Prime Implicant</th>
               <th className="table-cell">Binary Representation</th>
-              <th className="table-cell">Covers Maxterms</th>
+              <th className="table-cell">Covers Minterms</th>
             </tr>
           </thead>
           <tbody>
