@@ -1,23 +1,5 @@
 // Utility functions for Quine-McCluskey algorithm
 
-//[MODIFIED] - replaced filter.length() with reduce() which allows it to go directly to a string
-export const countOnes = (binary) => {
-  // Use reduce for cleaner counting
-  return binary.split('').reduce((count, bit) => count + (bit === '1' ? 1 : 0), 0);
-};
-
-
-//[MODIFIED] - throws an explicit error instead of -1
-// Uses reduce to allow for better implementation
-export const hammingDistance = (str1, str2) => {
-  // Early return with explicit error if lengths differ
-  if (str1.length !== str2.length) {
-    throw new Error('Strings must be of equal length for Hamming distance calculation');
-  }
-  
-  return str1.split('').reduce((distance, bit, i) => 
-    distance + (bit !== str2[i] ? 1 : 0), 0);
-};
 
 // Convert maxterms to binary representation
 // [MODIFIED] - Added input validation for debugging purposes
@@ -37,6 +19,11 @@ export const convertMaxtermsToBinary = (maxterms, numVars) => {
   });
 };
 
+//[MODIFIED] - replaced filter.length() with reduce() which allows it to go directly to a string
+export const countOnes = (binary) => {
+  // Use reduce for cleaner counting
+  return binary.split('').reduce((count, bit) => count + (bit === '1' ? 1 : 0), 0);
+};
 
 // [MODIFIED] - used reduce
 export const groupByOnes = (terms) => {
@@ -48,9 +35,21 @@ export const groupByOnes = (terms) => {
   }, {});
 };
 
+//[MODIFIED] - throws an explicit error instead of -1
+// Uses reduce to allow for better implementation
+export const checkDifferingBits = (string1, string2) => {
+  // Early return with explicit error if lengths differ
+  if (string1.length !== string2.length) {
+    throw new Error('Strings must be of equal length for Hamming distance calculation');
+  }
+  
+  return string1.split('').reduce((differentBits, bit, i) => 
+    differentBits + (bit !== string2[i] ? 1 : 0), 0);
+};
+
 //[MODIFIED] - Refer to modified comments below for changes
 export const findPrimeImplicants = (groups) => {
-  const markedTerms = new Set();
+  const markedTerms = new Set();  
   const primeImplicants = [];
   const newGroups = {};
   let combined = false;
@@ -67,24 +66,24 @@ export const findPrimeImplicants = (groups) => {
     newGroups[currentKey] = newGroups[currentKey] || []; // [MODIFIED] - changed group initialization to || []
     
     //[MODIFIED] - changed to for...of loops
-    for (const term1 of groups[currentKey]) {
-      for (const term2 of groups[nextKey]) {
-        if (hammingDistance(term1.binary, term2.binary) === 1) {
+    for (const currentTerm of groups[currentKey]) {
+      for (const nextTerm of groups[nextKey]) {
+        if (checkDifferingBits(currentTerm.binary, nextTerm.binary) === 1) {
           combined = true;
           //[MODIFIED] - Explicitly showing JSON.stringify
-          markedTerms.add(JSON.stringify(term1));
-          markedTerms.add(JSON.stringify(term2));
+          markedTerms.add(JSON.stringify(currentTerm));
+          markedTerms.add(JSON.stringify(nextTerm));
           
-          const combinedBinary = term1.binary
+          const combinedBinary = currentTerm.binary
             .split('')
-            .map((bit, idx) => bit !== term2.binary[idx] ? '-' : bit)
+            .map((bit, idx) => bit !== nextTerm.binary[idx] ? '-' : bit)
             .join('');
             
           const combinedTerm = {
             binary: combinedBinary,
             decimals: [...new Set([ //[MODIFIED] - Explicit creation of new set to avoid duplication
-              ...(term1.decimals || [term1.decimal]), // [MODIFIED] - Fallback to .decimal
-              ...(term2.decimals || [term2.decimal])
+              ...(currentTerm.decimals || [currentTerm.decimal]), // [MODIFIED] - Fallback to .decimal
+              ...(nextTerm.decimals || [nextTerm.decimal])
             ])],
             groupKey: countOnes(combinedBinary.replace(/-/g, '0')) // Count non-dash bits
           };
@@ -96,7 +95,7 @@ export const findPrimeImplicants = (groups) => {
       }
     }
   }
-  
+
   // Collect unmarked terms
   groupKeys.forEach(key => { // [MODIFIED] - replaced nested for loops with for each loops
     groups[key].forEach(term => {
