@@ -25,6 +25,8 @@ export default function QuineMcCluskeySolver() {
   
   // Reset Function: Clears the results only
   const resetSolver = () => {
+    setMinterms(''); 
+    setVariables('');
     setResults(null);
     setCurrentStep(0);
     setError('');
