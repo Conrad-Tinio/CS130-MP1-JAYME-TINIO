@@ -3,7 +3,7 @@
 
 // Convert maxterms to binary representation
 // [MODIFIED] - Added input validation for debugging purposes
-// Pre initialized decimals array
+// Pre-initialized decimals array
 export const convertMaxtermsToBinary = (maxterms, numVars) => {
   if (!Array.isArray(maxterms)) throw new Error('Maxterms must be an array');
   if (typeof numVars !== 'number') throw new Error('numVars must be a number');
@@ -186,8 +186,8 @@ export const binaryToAlgebraic = (binary, variables) => {
   const terms = []; //[MODIFIED] - Replaced string concatenation with array collection
   
   for (let i = 0; i < binary.length; i++) { //[MODIFIED] - Simplified complemented term handling
-    if (binary[i] === '0') terms.push(variables[i] + "'");
-    else if (binary[i] === '1') terms.push(variables[i]); //[MODIFIED] - Simplified uncomplemented term handling
+    if (binary[i] === '1') terms.push(variables[i] + "'");
+    else if (binary[i] === '0') terms.push(variables[i]); //[MODIFIED] - Simplified uncomplemented term handling
     // '-' is skipped
   }
   
