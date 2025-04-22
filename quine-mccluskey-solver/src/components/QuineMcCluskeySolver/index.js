@@ -25,9 +25,7 @@ export default function QuineMcCluskeySolver() {
   
   // Reset Function: Clears the results only
   const resetSolver = () => {
-    setMinterms(''); 
-    setVariables('');
-    setResults(null);
+    setResults(null)
     setCurrentStep(0);
     setError('');
     setMaxterms([]);
@@ -74,8 +72,26 @@ export default function QuineMcCluskeySolver() {
         setError('Please enter variables.');
         return;
       }
+
+      const validMinterms = /^[\d,]+$/;
+      if (!validMinterms.test(minterms.trim())) {
+        setError("Minterms should only be valid integers and no spaces.");
+        return;
+      }
+
+      const validVariables = /^[\A-Za-z]+$/;
+      if (!validVariables.test(variables.trim())) {
+        setError("Variables should only be valid English alphabet letters and no spaces.");
+        return;
+      }
   
-      const variableList = variables.trim().split('');
+      const variableList = variables.toUpperCase().trim().split('');
+      
+      const uniqueVariables = new Set(variableList); 
+      if (uniqueVariables.size !== variableList.length) {
+        setError("Variables shoud be unique. Please remove any duplicate letters.");
+        return;
+      }
   
       if (variableList.length > MAX_VARIABLES) {
         setError(`Too many variables. Maximum allowed is ${MAX_VARIABLES}.`);
