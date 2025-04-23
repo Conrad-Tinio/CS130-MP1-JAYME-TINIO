@@ -43,13 +43,21 @@ export const checkDifferingBits = (string1, string2) => {
     differentBits + (bit !== string2[i] ? 1 : 0), 0);
 };
 
-// Core algorithm to find prime implicants
-export const findPrimeImplicants = (groups) => {
+// Core algorithm to find prime implicants - MODIFIED to track iterations
+export const findPrimeImplicants = (groups, iterations = []) => {
   // Keeps track of terms combined
   const markedTerms = new Set();  
   const primeImplicants = [];
   const newGroups = {};
   let combined = false;
+  
+  // Save current state as an iteration
+  iterations.push({
+    groups: JSON.parse(JSON.stringify(groups)),
+    markedTerms: [], // We'll fill this at the end
+    newGroups: {}, // We'll fill this at the end
+    primeImplicants: []
+  });
 
   // Gets group keys and sort them numerically
   const groupKeys = Object.keys(groups).map(Number).sort((a, b) => a - b);
@@ -113,10 +121,16 @@ export const findPrimeImplicants = (groups) => {
     });
   });
   
+  // Update the current iteration with results
+  const currentIteration = iterations[iterations.length - 1];
+  currentIteration.markedTerms = Array.from(markedTerms).map(t => JSON.parse(t));
+  currentIteration.newGroups = JSON.parse(JSON.stringify(newGroups));
+  currentIteration.primeImplicants = JSON.parse(JSON.stringify(primeImplicants));
+  
   // If terms are combined, recursively checks for more prime implicants
   // Otherwise process is done
   return combined 
-    ? [...primeImplicants, ...findPrimeImplicants(newGroups)]
+    ? [...primeImplicants, ...findPrimeImplicants(newGroups, iterations)]
     : primeImplicants;
 };
 
