@@ -62,7 +62,7 @@ export default function QuineMcCluskeySolver() {
         setError('Please enter minterms.');
         return;
       }
-  
+
       if (!variables.trim()) {
         setError('Please enter variables.');
         return;
@@ -71,17 +71,17 @@ export default function QuineMcCluskeySolver() {
       // Validates minterm format - numbers and commas only
       const validMinterms = /^[\d,]+$/;
       if (!validMinterms.test(minterms.trim())) {
-        setError("Minterms should only be valid integers and no spaces.");
+        setError("Minterms should only be valid whole numbers and no spaces.");
         return;
       }
 
       // Only letters allowed for variables
       const validVariables = /^[\A-Za-z]+$/;
       if (!validVariables.test(variables.trim())) {
-        setError("Variables should only be valid English alphabet letters and no spaces.");
+        setError("Variables should only be valid English alphabet letters and no spaces/commas.");
         return;
       }
-  
+
       // Converts to uppercase and check for duplicates
       const variableList = variables.toUpperCase().trim().split('');
       const uniqueVariables = new Set(variableList); 
@@ -89,23 +89,29 @@ export default function QuineMcCluskeySolver() {
         setError("Variables shoud be unique. Please remove any duplicate letters.");
         return;
       }
-  
+
       if (variableList.length > MAX_VARIABLES) {
         setError(`Too many variables. Maximum allowed is ${MAX_VARIABLES}.`);
         return;
       }
-  
+
       // Processes minterms input into a numeric array
       const mintermList = minterms.split(',')
         .map(term => parseInt(term.trim(), 10))
         .filter(term => !isNaN(term)); // gets rid of any non-numbers
-  
+
+      const uniqueMinterms = new Set(mintermList)
+      if (uniqueMinterms.size !== mintermList.length) {
+        setError("Minterms shoud be unique. Please remove any duplicate numbers.");
+        return;
+      }
+
       // Makes sure that there are no invalid numbers
       if (mintermList.length === 0) {
         setError('Invalid minterms. Please enter comma-separated numbers.');
         return;
       }
-  
+
       // Figures out what the maxterms should be
       const numVars = variableList.length;
       const maxPossibleValue = Math.pow(2, numVars) - 1;
@@ -115,12 +121,33 @@ export default function QuineMcCluskeySolver() {
         setError(`With ${numVars} variables, minterms must be between 0 and ${maxPossibleValue}.`);
         return;
       }
-  
+
+      // NEW: Check if all possible minterms are selected (tautology case)
+      const allPossibleMinterms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);
+      const isAllMintermsSelected = allPossibleMinterms.every(term => 
+        mintermList.includes(term)
+      );
+
+      if (isAllMintermsSelected) {
+        // Handle tautology case - create a simple result object with just the expression
+        setResults({
+          isTautology: true,
+          posExpression: '1', // Tautology in POS form is just 1
+          numVars,
+          variableList
+        });
+        
+        // Go directly to final step
+        setCurrentStep(5);
+        return;
+      }
+
       // Generates the maxterms list (all possible values minus the minterms)
       const allTerms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);
       const maxtermList = allTerms.filter(term => !mintermList.includes(term));
       setMaxterms(maxtermList);
       
+      // Rest of your algorithm...
       // Step 1: Converts maxterms to binary and group them
       const binaryTerms = convertMaxtermsToBinary(maxtermList, numVars);
       const groups = groupByOnes(binaryTerms);
@@ -140,7 +167,7 @@ export default function QuineMcCluskeySolver() {
       ));
       // Joins with dot operator for POS form
       const posExpression = algebraicTerms.map(term => `(${term})`).join(' · ');
-  
+
       // Stores everything for display
       setResults({
         groups,
@@ -150,7 +177,8 @@ export default function QuineMcCluskeySolver() {
         essentialPIs,
         posExpression,
         numVars,
-        variableList
+        variableList,
+        isTautology: false
       });
       
       // Shows the first step by default

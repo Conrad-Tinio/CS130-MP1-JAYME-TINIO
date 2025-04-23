@@ -14,12 +14,19 @@ export default function ResultsDisplay({
   setCurrentStep, 
   newFunction
 }) {
+  // Check if we're handling a tautology case
+  const isTautology = results.isTautology === true;
+
   return (
     <div className="results-container">
       {/* intro text */}
       <div className="results-intro">
-        <p className="font-semibold">For POS form, we'll find the minimal product of sums using the minterms.</p>
-        <p>Minterms: {maxterms.join(', ')}</p>
+        {isTautology ? (
+          <p className="font-semibold">All possible minterms selected - this is a tautology case (always true).</p>
+        ) : (
+          <p className="font-semibold">For POS form, we'll find the minimal product of sums using the minterms.</p>
+        )}
+        {!isTautology && <p>Minterms: {maxterms.join(', ')}</p>}
       </div>
       
       {/* new function button */}
@@ -30,22 +37,24 @@ export default function ResultsDisplay({
       </div>
       
       {/* progress bar - shows which step we're on */}
-      <ProgressBar currentStep={currentStep} totalSteps={5} />
+      <ProgressBar currentStep={isTautology ? 5 : currentStep} totalSteps={5} />
       
       {/* prev/next buttons */}
       <div className="step-navigation">
         <div className="button-wrapper">
           <button
             onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-            disabled={currentStep <= 1}
-            className={`nav-button ${currentStep <= 1 ? 'nav-button-disabled' : 'nav-button-enabled'}`}
+            disabled={currentStep <= 1 || isTautology}
+            className={`nav-button ${currentStep <= 1 || isTautology ? 'nav-button-disabled' : 'nav-button-enabled'}`}
           >
             <span style={{ display: 'flex', alignItems: 'center' }}>
               <FaArrowLeft size={14} style={{ display: 'inline-block', marginRight: '8px' }} /> Prev Step
             </span>
           </button>
         </div>
-        <div className="step-counter">Step {currentStep} of 5</div>
+        <div className="step-counter">
+          {isTautology ? 'Final Step (Tautology)' : `Step ${currentStep} of 5`}
+        </div>
         <div className="button-wrapper">
           <button
             onClick={() => setCurrentStep(Math.min(5, currentStep + 1))}
@@ -60,11 +69,11 @@ export default function ResultsDisplay({
       </div>
       
       {/* shows the current step */}
-      {currentStep === 1 && <Step1 groups={results.groups} />}
-      {currentStep === 2 && <Step2 primeImplicants={results.primeImplicants} />}
-      {currentStep === 3 && <Step3 chart={results.chart} maxterms={maxterms} />}
-      {currentStep === 4 && <Step4 essentialPIs={results.essentialPIs} variableList={results.variableList} />}
-      {currentStep === 5 && <Step5 posExpression={results.posExpression} />}
+      {!isTautology && currentStep === 1 && <Step1 groups={results.groups} />}
+      {!isTautology && currentStep === 2 && <Step2 primeImplicants={results.primeImplicants} />}
+      {!isTautology && currentStep === 3 && <Step3 chart={results.chart} maxterms={maxterms} />}
+      {!isTautology && currentStep === 4 && <Step4 essentialPIs={results.essentialPIs} variableList={results.variableList} />}
+      {currentStep === 5 && <Step5 posExpression={results.posExpression} isTautology={isTautology} />}
     </div>
   );
 }
