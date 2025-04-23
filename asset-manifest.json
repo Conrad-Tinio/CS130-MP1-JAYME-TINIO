@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/CS130-MP1-JAYME-TINIO/static/css/main.0d90b4c2.css",
+    "main.css": "/CS130-MP1-JAYME-TINIO/static/css/main.18cfbbe0.css",
     "main.js": "/CS130-MP1-JAYME-TINIO/static/js/main.0f74b480.js",
     "static/js/453.fe892ffa.chunk.js": "/CS130-MP1-JAYME-TINIO/static/js/453.fe892ffa.chunk.js",
     "static/media/bg-image1.png": "/CS130-MP1-JAYME-TINIO/static/media/bg-image1.9160533a3914158dea5a.png",
     "static/media/Audiowide-Regular.ttf": "/CS130-MP1-JAYME-TINIO/static/media/Audiowide-Regular.909342598b3adb03b2e6.ttf",
     "static/media/Oxanium-Regular.ttf": "/CS130-MP1-JAYME-TINIO/static/media/Oxanium-Regular.28b3bb4224520603e148.ttf",
     "index.html": "/CS130-MP1-JAYME-TINIO/index.html",
-    "main.0d90b4c2.css.map": "/CS130-MP1-JAYME-TINIO/static/css/main.0d90b4c2.css.map",
+    "main.18cfbbe0.css.map": "/CS130-MP1-JAYME-TINIO/static/css/main.18cfbbe0.css.map",
     "main.0f74b480.js.map": "/CS130-MP1-JAYME-TINIO/static/js/main.0f74b480.js.map",
     "453.fe892ffa.chunk.js.map": "/CS130-MP1-JAYME-TINIO/static/js/453.fe892ffa.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0d90b4c2.css",
+    "static/css/main.18cfbbe0.css",
     "static/js/main.0f74b480.js"
   ]
 }
