@@ -1,13 +1,8 @@
 /* 
 MAJOR CHANGES FROM PREVIOUS CSS:
-1. Added custom fonts with @font-face
-2. Complete color scheme change to a dark purple/violet theme
-3. Added background image and styling for body
-4. Enhanced UI with glow effects, animations, and shadows
-5. More detailed styling for chart visualizations
-6. Improved responsive design and spacing
-7. Added icon support in buttons
-8. Refined button styles with hover effects and transitions
+1. Buttons with hover effects and transitions
+2. Animated gradient effects for buttons and progress bar 
+3. Progress bar itself
 */
 
 /* Custom Font Definitions - MODIFIED */
@@ -43,10 +38,10 @@ button, input {
   margin-left: auto;
   margin-right: auto;
   padding: 1.5rem; 
-  border-radius: 1rem; /* Increased from 0.5rem */
+  border-radius: 1rem; 
   color: #e9d8ff;
   font-family: Oxanium-Regular;
-  /* Removed background color and box-shadow */
+  /* removed background color and box-shadow */
 }
 
 .content-wrapper {
@@ -56,12 +51,12 @@ button, input {
 
 /* Title Styles - UPDATED */
 .solver-title {
-  font-size: 1.75rem; /* Increased from 1.5rem */
+  font-size: 1.75rem; 
   font-weight: 700; 
   text-align: center;
-  margin-bottom: 2rem; /* Increased from 1.5rem */
-  color: #d8b4fe; /* Changed from default black */
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); /* MODIFIED: added glow effect */
+  margin-bottom: 2rem; 
+  color: #d8b4fe;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); /* MODIFIED: added glowy and neon effect */
   font-family: Audiowide-Regular; /* MODIFIED: custom font */
 }
 
@@ -69,8 +64,8 @@ button, input {
 .input-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem; /* Increased from 1rem */
-  margin-bottom: 2.5rem; /* Increased from 1.5rem */
+  gap: 2.5rem; 
+  margin-bottom: 2.5rem; 
 }
 
 @media (min-width: 768px) {
@@ -85,24 +80,24 @@ button, input {
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #c4b5fd; /* Changed from #374151 */
-  margin-bottom: 0.75rem; /* Increased from 0.25rem */
+  color: #c4b5fd; 
+  margin-bottom: 0.75rem; 
 }
 
 .input-field {
   width: 100%;
-  padding: 0.75rem; /* Increased from 0.5rem */
-  border: 1px solid #6d28d9; /* Changed from #d1d5db */
-  border-radius: 2rem; /* Significantly increased from 0.25rem */
-  background-color: #1e1333; /* MODIFIED: dark background */
-  color: #e9d8ff; /* MODIFIED: light text */
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); /* MODIFIED: glow effect */
+  padding: 0.75rem; 
+  border: 1px solid #6d28d9; 
+  border-radius: 2rem; 
+  background-color: #1e1333; /* MODIFIED: darker background */
+  color: #e9d8ff; /* MODIFIED: lighter text */
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); /* MODIFIED: glowy and neon effect */
 }
 
 .input-field:focus {
   outline: none;
   border-color: #8b5cf6;
-  box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe; /* MODIFIED: focus effect */
+  box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe; /* MODIFIED: more focused effect */
 }
 
 .input-group {
@@ -113,84 +108,125 @@ button, input {
 .button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem; /* Increased from 1.5rem */
+  margin-bottom: 2rem; 
   margin-top: 1.5rem; /* MODIFIED */
 }
 
-.solve-button {
-  padding: 0.75rem 1.5rem; /* Increased from 0.5rem 1rem */
-  background-color: #8b5cf6; /* Changed from #0f982d */
+/* Button styles */
+.solve-button, .clear-button, .reset-button, .new-function-button, .nav-button-enabled {
+  padding: 0.75rem 1.5rem;
   color: white;
-  border-radius: 2rem; /* Increased from 0.25rem */
+  border-radius: 2rem;
   border: none;
-  font-weight: 600; /* MODIFIED */
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); /* NEW */
-  transition: all 0.3s ease; /* MODIFIED */
+  font-weight: 600;
+  transition: all 0.3s ease, background-position 0.5s ease;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+  background-size: 200% 100%;
+  background-position: 0 0;
 }
 
-.solve-button:hover {
-  background-color: #7c3aed; /* Changed from #02831e */
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.7); /* MODIFIED */
-  transform: translateY(-2px); /* MODIFIED */
+/* Gives gradient backgrounds for each button type */
+.solve-button {
+  background-image: linear-gradient(135deg, #8b5cf6, #440aa1);
 }
 
 .clear-button {
-  padding: 0.75rem 1.5rem; /* Increased from 0.5rem 1rem */
-  margin-left: 15px; /* Increased from 10px */
-  background-color: #743ef1; /* Changed from #e2971e */
-  color: white;
-  border-radius: 2rem; /* Increased from 0.25rem */
-  border: none;
-  font-weight: 600; /* MODIFIED */
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); /* MODIFIED */
-  transition: all 0.3s ease; /* MODIFIED */
-}
-
-.clear-button:hover {
-  background-color: #5815f3; /* Changed from #ce8510 */
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* MODIFIED */
-  transform: translateY(-2px); /* MODIFIED */
+  background-image: linear-gradient(135deg, #743ef1, #4911a3);
+  margin-left: 15px;
 }
 
 .reset-button {
-  padding: 0.75rem 1.5rem; /* Increased from 0.5rem 1rem */
-  margin-left: 15px; /* Increased from 10px */
-  background-color: #5815f3; /* Changed from #e22b1e */
-  color: white;
-  border-radius: 2rem; /* Increased from 0.25rem */
-  border: none;
-  font-weight: 600; /* NEW */
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); /* MODIFIED */
-  transition: all 0.3s ease; /* MODIFIED*/
+  background-image: linear-gradient(135deg, #5815f3, #2f068d);
+  margin-left: 15px;
+}
+
+.new-function-button {
+  background-image: linear-gradient(135deg, #a855f7, #510c92);
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button-enabled {
+  background-image: linear-gradient(135deg, #8b5cf6, #4b15a2);
+  width: 120px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* NEW: Common hover effect with animated gradient */
+.solve-button:hover, .clear-button:hover, .reset-button:hover, .new-function-button:hover, .nav-button-enabled:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.7);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* NEW: Custom hover gradients for each button */
+.solve-button:hover {
+  background-image: linear-gradient(135deg, #c9a0f0, #7c3aed, #8b5cf6, #4b07b8);
+}
+
+.clear-button:hover {
+  background-image: linear-gradient(135deg, #b49ceb, #743ef1, #6d28d9, #2c038d);
 }
 
 .reset-button:hover {
-  background-color: #4b05f1cc; /* Changed from #c50000 */
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* MODIFIED*/
-  transform: translateY(-2px); /* MODIFIED */
+  background-image: linear-gradient(135deg, #a47aed, #5815f3, #4b05f1, #2a0591);
+}
+
+.new-function-button:hover {
+  background-image: linear-gradient(135deg, #d784e2, #a855f7, #9333ea, #561094);
+}
+
+.nav-button-enabled:hover {
+  background-image: linear-gradient(135deg, #b89cfa, #7c3aed, #6d28d9, #380e7c);
+}
+
+/* Disabled button */
+.nav-button-disabled {
+  width: 120px;
+  height: 38px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  border: none;
+  font-weight: 600;
+  background-color: #3f3756;
+  color: #9ca3af;
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 }
 
 /* Error Message - UPDATED */
 .error-message {
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background-color: rgba(248, 113, 113, 0.1); /* Changed from #fee2e2 */
-  color: #f87171; /* Changed from #991b1b */
+  background-color: rgba(248, 113, 113, 0.1); 
+  color: #f87171; 
   border-radius: 0.5rem;
   border: 1px solid #ef4444; /* MODIFIED */
 }
 
 /* Results Section - UPDATED */
 .results-container {
-  background-color: #1e1333; /* Changed from white */
-  padding: 1.5rem; /* Increased from 1rem */
-  border-radius: 0.75rem; /* Increased from 0.25rem */
-  border: 1px solid #6d28d9; /* Changed from #e5e7eb */
+  background-color: #1e1333; 
+  padding: 1.5rem; 
+  border-radius: 0.75rem; 
+  border: 1px solid #6d28d9;
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); /* MODIFIED */
 }
 
 .results-intro {
-  margin-bottom: 1.5rem; /* Increased from 1rem */
+  margin-bottom: 1.5rem;
   color: #ddd6fe; /* MODIFIED */
 }
 
@@ -203,26 +239,7 @@ button, input {
 .new-function-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem; /* Increased from 1rem */
-}
-
-.new-function-button {
-  height: 38px; /* Increased from 33px */
-  border: none;
-  border-radius: 2rem; /* Increased from 0.25rem */
-  background-color: #a855f7; /* Changed from rgb(154, 1, 154) */
-  color: white;
-  padding: 0.5rem 1.25rem; /* Changed from 0.25rem 0.75rem */
-  font-weight: 600; /* NEW */
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); /* MODIFIED */
-  transition: all 0.3s ease; /* MODIFIED */
-}
-
-.new-function-button:hover {
-  cursor: pointer;
-  background-color: #9333ea; /* Changed from rgb(120, 2, 120) */
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.7); /* MODIFIED */
-  transform: translateY(-2px); /* MODIFIED */
+  margin-bottom: 1.5rem; 
 }
 
 /* Navigation - COMPLETELY REDESIGNED */
@@ -231,7 +248,7 @@ button, input {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem; /* Increased from 1rem */
+  margin-bottom: 1.5rem; 
   gap: 1rem;
   width: 100%;
   height: 48px; /* MODIFIED: Fixed height container */
@@ -255,39 +272,6 @@ button, input {
   height: 100%;
 }
 
-.nav-button {
-  width: 120px; /* MODIFIED */
-  height: 38px; /* Increased from 35px */
-  padding: 1rem 1rem; /* Changed from 0.25rem 0.75rem */
-  border-radius: 2rem; /* Increased from 0.25rem */
-  border: none;
-  font-weight: 600; /* MODIFIED */
-  transition: all 0.3s ease; /* MODIFIED */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.nav-button-enabled {
-  background-color: #8b5cf6; /* Changed from #2563eb */
-  color: white;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); /* MODIFIED */
-  cursor: pointer;
-}
-
-.nav-button-enabled:hover {
-  background-color: #7c3aed; /* Changed from #1d4ed8 */
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); /* MODIFIED */
-  transform: translateY(-2px); /* NEW */
-}
-
-.nav-button-disabled {
-  background-color: #3f3756; /* Changed from #d1d5db */
-  color: #9ca3af; /* MODIFIED */
-  cursor: not-allowed; /* MODIFIED */
-}
-
 /* Table Styles - UPDATED */
 .table-container {
   overflow-x: auto;
@@ -298,16 +282,16 @@ button, input {
 .full-width-table {
   min-width: 100%;
   border-collapse: collapse;
-  border: 1px solid #d8b4fe; /* Changed from #d1d5db */
+  border: 1px solid #d8b4fe; 
 }
 
 .table-header {
-  background-color: #2e1c4a; /* Changed from #f3f4f6 */
+  background-color: #2e1c4a; 
 }
 
 .table-cell {
-  border: 1px solid #d8b4fe; /* Changed from #d1d5db */
-  padding: 0.75rem 1rem; /* Increased from 0.5rem 1rem */
+  border: 1px solid #d8b4fe; 
+  padding: 0.75rem 1rem; 
   color: #ddd6fe; /* MODIFIED */
 }
 
@@ -317,40 +301,39 @@ button, input {
 
 /* Result Styles - UPDATED */
 .result-expression {
-  background-color: #2e1c4a; /* Changed from #f3f4f6 */
-  padding: 1.5rem; /* Increased from 1rem */
-  border-radius: 0.75rem; /* Increased from 0.25rem */
-  margin-bottom: 1.5rem; /* Increased from 1rem */
+  background-color: #2e1c4a;
+  padding: 1.5rem;
+  border-radius: 0.75rem; 
+  margin-bottom: 1.5rem; 
   border: 1px solid #7c3aed; /* NEW */
   box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe; /* MODIFIED */
 }
 
 .expression-text {
-  font-size: 3rem; /* Increased from 1.25rem */
-  margin-top: 0.75rem; /* Increased from 0.5rem */
+  font-size: 3rem; 
+  margin-top: 0.75rem; 
   color: #a5b4fc; /* MODIFIED */
   margin-bottom: 1rem; /* MODIFIED */
 }
 
 .note-text {
   font-size: 0.875rem;
-  color: #a1a1aa; /* Changed from #4b5563 */
+  color: #a1a1aa;
 }
 
 /* Step Styles - UPDATED */
 .step-heading {
-  font-size: 1.375rem; /* Increased from 1.25rem */
+  font-size: 1.375rem; 
   font-weight: 600;
-  margin-bottom: 1rem; /* Increased from 0.75rem */
+  margin-bottom: 1rem;
   color: #d8b4fe; /* MODIFIED */
 }
 
 .step-description {
-  margin-bottom: 1rem; /* Increased from 0.75rem */
+  margin-bottom: 1rem; 
   color: #ddd6fe; /* MODFIED */
 }
 
-/* MODIFIED: Visualization Styles */
 .visualization-container {
   background-color: #1e1333;
   border-radius: 0.75rem;
@@ -377,7 +360,7 @@ button, input {
   margin-bottom: 1.5rem;
 }
 
-/* MODIFIED: Utility Classes */
+/* MODIFIED: Classes for glowy borders and text */
 .glow-text {
   color: #d8b4fe;
   text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
@@ -404,7 +387,57 @@ button, input {
   transition: width 0.3s ease;
 }
 
-/* MODIFIED: Animation */
+/* Progress Bar Styles */
+.progress-bar-container {
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.progress-step {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Active step with gradient */
+.progress-step.active {
+  background-image: linear-gradient(135deg, #d8b4fe, #8b5cf6);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s ease infinite;
+  box-shadow: 0 0 5px #d8b4fe, 0 0 10px #d8b4fe;
+  color: #4c1d95;
+}
+
+.progress-bar-track {
+  height: 10px;
+  width: 100%;
+  background-color: #4c1d95;
+  border-radius: 5px;
+  border: 1px solid #d8b4fe;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.5s ease-in-out;
+  background: linear-gradient(90deg, #8b5cf6, #d8b4fe, #a855f7);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* MODIFIED: Pulse animation for progress bar */
 @keyframes pulse {
   0% {
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
@@ -417,11 +450,23 @@ button, input {
   }
 }
 
+/* Animation for gradient movement */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .pulse-animation {
   animation: pulse 2s infinite;
 }
 
-/* MODIFIED: Chart/Grid Visualization */
 .chart-outer-container {
   position: relative;
   border: 2px solid #6d28d9;
@@ -498,7 +543,6 @@ button, input {
   font-weight: bold;
 }
 
-/* MODIFIED: Responsive Adjustments for Chart */
 @media (max-width: 640px) {
   .chart-cell {
     width: 40px;
@@ -537,7 +581,6 @@ button, input {
   border-radius: 4px;
 }
 
-/* MODIFIED: Icon Support */
 .button-container .icon {
   margin-right: 8px;
   vertical-align: middle;
@@ -557,12 +600,12 @@ button, input {
   font-size: 0.9em;
 }
 
-/* Left-side icons (for Previous Step button) */
+/* for Previous Step button icon */
 .nav-button svg:first-child {
   margin-right: 8px;
 }
 
-/* Right-side icons (for Next Step button) */
+/* for Next Step button icons */
 .nav-button svg:last-child {
   margin-left: 8px;
 }
@@ -572,7 +615,6 @@ button, input {
   margin-right: 8px;
 }
 
-/* Fix for vertical alignment in buttons */
 .nav-button,
 .new-function-button {
   display: flex;
@@ -580,7 +622,6 @@ button, input {
   justify-content: center;
 }
 
-/* For better appearance on smaller screens */
 @media (max-width: 640px) {
   .nav-button svg,
   .new-function-button svg {

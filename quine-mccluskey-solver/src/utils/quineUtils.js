@@ -1,94 +1,99 @@
-// Utility functions for Quine-McCluskey algorithm
-
-
-// Convert maxterms to binary representation
-// [MODIFIED] - Added input validation for debugging purposes
-// Pre-initialized decimals array
+// Converts decimal maxterms to their binary representation
 export const convertMaxtermsToBinary = (maxterms, numVars) => {
-  if (!Array.isArray(maxterms)) throw new Error('Maxterms must be an array');
-  if (typeof numVars !== 'number') throw new Error('numVars must be a number');
+  // Added basic error checking
+  if (!Array.isArray(maxterms)) throw new Error('An unexpected error occured. Please try again.');
+  if (typeof numVars !== 'number') throw new Error('An unexpected error occured. Please try again.');
   
   return maxterms.map(term => {
+    // Converts to binary and pads with leading zeros
     const binary = term.toString(2).padStart(numVars, '0');
     return { 
       decimal: term, 
       binary, 
       groupKey: countOnes(binary),
-      decimals: [term] // Initialize decimals array for consistency
+      decimals: [term] // Initializes with this term
     };
   });
 };
 
-//[MODIFIED] - replaced filter.length() with reduce() which allows it to go directly to a string
+// Counts how many 1's are in a binary string
 export const countOnes = (binary) => {
-  // Use reduce for cleaner counting
   return binary.split('').reduce((count, bit) => count + (bit === '1' ? 1 : 0), 0);
 };
 
-// [MODIFIED] - used reduce
+// Groups terms by the number of 1's they contain
 export const groupByOnes = (terms) => {
   return terms.reduce((groups, term) => {
     const onesCount = term.groupKey;
+    // Creates the array if it doesn't exist yet
     groups[onesCount] = groups[onesCount] || [];
     groups[onesCount].push(term);
     return groups;
   }, {});
 };
 
-//[MODIFIED] - throws an explicit error instead of -1
-// Uses reduce to allow for better implementation
+// Calculates how many bits are different between two binary strings
 export const checkDifferingBits = (string1, string2) => {
-  // Early return with explicit error if lengths differ
   if (string1.length !== string2.length) {
     throw new Error('Strings must be of equal length for Hamming distance calculation');
   }
   
+  // Counts how many positions have different bits
   return string1.split('').reduce((differentBits, bit, i) => 
     differentBits + (bit !== string2[i] ? 1 : 0), 0);
 };
 
-//[MODIFIED] - Refer to modified comments below for changes
+// Core algorithm to find prime implicants
 export const findPrimeImplicants = (groups) => {
+  // Keeps track of terms combined
   const markedTerms = new Set();  
   const primeImplicants = [];
   const newGroups = {};
   let combined = false;
 
-  //[MODIFIED] - changed numeric sorting to explicit numeric sorting
+  // Gets group keys and sort them numerically
   const groupKeys = Object.keys(groups).map(Number).sort((a, b) => a - b);
   
+  // Looks for terms that differ by exactly 1 bit
   for (let i = 0; i < groupKeys.length - 1; i++) {
     const currentKey = groupKeys[i];
     const nextKey = groupKeys[i + 1];
     
-    if (nextKey - currentKey !== 1) continue; // [MODIFIED] - Added short circuit with continue
+    // Skips if groups aren't adjacent (# of 1's differs by more than 1)
+    if (nextKey - currentKey !== 1) continue;
     
-    newGroups[currentKey] = newGroups[currentKey] || []; // [MODIFIED] - changed group initialization to || []
+    // Initializes the group in newGroups if not there yet
+    newGroups[currentKey] = newGroups[currentKey] || [];
     
-    //[MODIFIED] - changed to for...of loops
+    // Compares each term in current group with each in next group
     for (const currentTerm of groups[currentKey]) {
       for (const nextTerm of groups[nextKey]) {
+        // If they differ by exactly 1 bit, combines them
         if (checkDifferingBits(currentTerm.binary, nextTerm.binary) === 1) {
           combined = true;
-          //[MODIFIED] - Explicitly showing JSON.stringify
+          // Marks both terms as used
           markedTerms.add(JSON.stringify(currentTerm));
           markedTerms.add(JSON.stringify(nextTerm));
           
+          // Creates the combined term with a dash for the differing bit
           const combinedBinary = currentTerm.binary
             .split('')
             .map((bit, idx) => bit !== nextTerm.binary[idx] ? '-' : bit)
             .join('');
             
+          // Builds the new combined term object
           const combinedTerm = {
             binary: combinedBinary,
-            decimals: [...new Set([ //[MODIFIED] - Explicit creation of new set to avoid duplication
-              ...(currentTerm.decimals || [currentTerm.decimal]), // [MODIFIED] - Fallback to .decimal
+            // Combines and deduplicate the decimal values
+            decimals: [...new Set([
+              ...(currentTerm.decimals || [currentTerm.decimal]),
               ...(nextTerm.decimals || [nextTerm.decimal])
             ])],
-            groupKey: countOnes(combinedBinary.replace(/-/g, '0')) // Count non-dash bits
+            groupKey: countOnes(combinedBinary.replace(/-/g, '0'))
           };
           
-          if (!newGroups[currentKey].some(t => t.binary === combinedBinary)) { // [MODIFIED] - simplified duplicate through .some() and direct comparison of binary strings
+          // Avoids duplicates in the new group
+          if (!newGroups[currentKey].some(t => t.binary === combinedBinary)) {
             newGroups[currentKey].push(combinedTerm); 
           }
         }
@@ -96,31 +101,32 @@ export const findPrimeImplicants = (groups) => {
     }
   }
 
-  // Collect unmarked terms
-  groupKeys.forEach(key => { // [MODIFIED] - replaced nested for loops with for each loops
+  // Collect terms that weren't combined (prime implicants)
+  groupKeys.forEach(key => {
     groups[key].forEach(term => {
       if (!markedTerms.has(JSON.stringify(term))) {
         primeImplicants.push({
-          ...term, // [MODIFIED] - consistent object spreading
-          decimals: term.decimals || [term.decimal] // [MODIFIED] - added safety check
+          ...term,
+          decimals: term.decimals || [term.decimal] 
         });
       }
     });
   });
   
-  //[MODIFIED] - added ternary conditional
+  // If terms are combined, recursively checks for more prime implicants
+  // Otherwise process is done
   return combined 
     ? [...primeImplicants, ...findPrimeImplicants(newGroups)]
     : primeImplicants;
 };
 
-// Create prime implicant chart
-//[MODIFIED] - added reduce and eliminated nested for loops
+// Creates a chart showing which prime implicants cover which maxterms
 export const createPrimeImplicantChart = (primeImplicants, maxterms) => {
   return primeImplicants.reduce((chart, pi) => {
     chart[pi.binary] = {
       term: pi.binary,
       decimals: pi.decimals,
+      // Creates a map of which maxterms this implicant covers
       covers: maxterms.reduce((cov, mt) => {
         cov[mt] = pi.decimals.includes(mt);
         return cov;
@@ -130,66 +136,78 @@ export const createPrimeImplicantChart = (primeImplicants, maxterms) => {
   }, {});
 };
 
-//[MODIFIED] - see comments to see modifications
+// Finds the essential prime implicants that cover all maxterms
 export const findEssentialPrimeImplicants = (chart, maxterms) => {
   const essentialPIs = [];
   const coveredMaxterms = new Set();
   
-  // First pass: Find essential PIs
+  // Finds essential prime implicants (ones that uniquely cover a maxterm)
   maxterms.forEach(maxterm => {
+    // Finds all PIs that cover this maxterm
     const coveringPIs = Object.keys(chart)
-      .filter(pi => chart[pi].covers[maxterm]); //[MODIFIED] - combined Object.keys() and .filter() into a single expression
+      .filter(pi => chart[pi].covers[maxterm]);
     
+    // If only one PI covers this maxterm, it's essential
     if (coveringPIs.length === 1) {
-      const [pi] = coveringPIs; //[MODIFIED] - replaced coveringPIs[0]
-      if (!essentialPIs.includes(pi)) { // [MODIFIED] - checks if there are duplicate PIs
+      const [pi] = coveringPIs; // Destructuring is cleaner than [0]
+      if (!essentialPIs.includes(pi)) {
         essentialPIs.push(pi);
+        // Marks all maxterms covered by this PI
         chart[pi].decimals.forEach(d => coveredMaxterms.add(d));
       }
     }
   });
   
-  // Second pass: Greedy coverage for remaining terms
-  let remainingMaxterms = maxterms.filter(mt => !coveredMaxterms.has(mt)); //[MODIFIED] - changed const to let
+  // Uses greedy approach to see if more PIs are needed to cover all maxterms
+  let remainingMaxterms = maxterms.filter(mt => !coveredMaxterms.has(mt));
+  
+  // Sorts remaining PIs by how many uncovered maxterms they cover
   const remainingPIs = Object.keys(chart)
     .filter(pi => !essentialPIs.includes(pi))
     .sort((a, b) => 
       countCoveredTerms(chart[b], remainingMaxterms) - 
       countCoveredTerms(chart[a], remainingMaxterms)
-    ); // [MODIFIED] - added countCoveredTerms helper function for cleaner operation
+    );
   
+  // Adds PIs that cover the most remaining maxterms
   for (const pi of remainingPIs) {
-    if (remainingMaxterms.length === 0) break; //[MODIFIED] - added break in the case that all terms are covered
+    // If everything is covered, process is done
+    if (remainingMaxterms.length === 0) break;
     
+    // Finds which uncovered maxterms this PI covers
     const newlyCovered = remainingMaxterms
       .filter(mt => chart[pi].covers[mt]);
     
+    // If it covers anything, add it
     if (newlyCovered.length > 0) {
       essentialPIs.push(pi);
+      // Updates covered and remaining maxterms
       newlyCovered.forEach(mt => coveredMaxterms.add(mt));
       remainingMaxterms = remainingMaxterms
         .filter(mt => !coveredMaxterms.has(mt));
-    } //[MODIFIED] - update remainingMaxterms in-place after each selection
+    }
   }
   
+  // Returns the actual PI objects, not just their keys
   return essentialPIs.map(pi => chart[pi]);
 };
 
-// [MODIFIED] - Helper function for coverage counting logic
+// Helper to count how many terms a PI covers
 const countCoveredTerms = (pi, terms) => 
   terms.filter(mt => pi.covers[mt]).length;
 
-
-// Convert binary term to algebraic form (POS)
-//[MODIFIED] - see function for all modified comments
+// Converts binary term to algebraic form
 export const binaryToAlgebraic = (binary, variables) => {
-  const terms = []; //[MODIFIED] - Replaced string concatenation with array collection
+  // Builds the sum-term (for POS)
+  const terms = [];
   
-  for (let i = 0; i < binary.length; i++) { //[MODIFIED] - Simplified complemented term handling
+  for (let i = 0; i < binary.length; i++) {
+    // In POS, 1 means complemented
     if (binary[i] === '1') terms.push(variables[i] + "'");
-    else if (binary[i] === '0') terms.push(variables[i]); //[MODIFIED] - Simplified uncomplemented term handling
-    // '-' is skipped
+    // 0 means uncomplemented
+    else if (binary[i] === '0') terms.push(variables[i]);
   }
   
-  return terms.join('+') || '1'; //[MODIFIED] - Single join operation at the end and empty product is 1 in POS
+  // Joins with + for sum term, return 1 if empty (identity)
+  return terms.join('+') || '1';
 };

@@ -12,30 +12,28 @@ import {
 import './QuineMcCluskeySolver.css';
 
 export default function QuineMcCluskeySolver() {
-  // Initialize the constants to be used 
-  const [minterms, setMinterms] = useState('');         // Stores the user input for minterms (e.g. 1,2,3)
-  const [variables, setVariables] = useState('');       // Stores the user input for variables (e.g. ABC)
-  const [maxterms, setMaxterms] = useState([]);         // Stores the calculated maxterms (the complement of the minterms)
-  const [currentStep, setCurrentStep] = useState(0);    // Stores the current step of the process (from 0-5 based on our whole implementation)
-  const [results, setResults] = useState(null);         // Stores the calculated results based on the Quine-McCluskey Algorithm
-  const [error, setError] = useState('');               // Stores the error messages for invalid inputs or actions
+  // State variables
+  const [minterms, setMinterms] = useState(''); // e.g. "1,2,3"
+  const [variables, setVariables] = useState(''); // e.g. "ABC"
+  const [maxterms, setMaxterms] = useState([]); // complement of minterms
+  const [currentStep, setCurrentStep] = useState(0); // tracks which step to display
+  const [results, setResults] = useState(null); // algorithm results
+  const [error, setError] = useState(''); // error messages
   
-  // Maximum allowed variables (10)
+  // Max number of variables to prevent performance issues
   const MAX_VARIABLES = 10;
   
-  // Reset Function: Clears the results only
+  // Resets the results without touching inputs
   const resetSolver = () => {
-    setResults(null)
+    setResults(null);
     setCurrentStep(0);
     setError('');
     setMaxterms([]);
   };
 
-  // [MODIFIED] Clear Function: Clears the inputs only
-  // Changed formatting of if else statements and function calls
-  // Added an additional setError('') to clear the setError('') function
+  // Clears only the input fields
   const clearInput = () => {
-    // Clear input fields and show error if already empty
+    // Shows error if nothing to clear
     if (!minterms.trim() && !variables.trim()) {
       setError('There is nothing to clear.');
       return;
@@ -43,26 +41,23 @@ export default function QuineMcCluskeySolver() {
     
     setMinterms(''); 
     setVariables('');
-    setError('');
+    setError(''); // clears any existing errors
   };
 
-  // [MODIFIED] New Function: Clears all inputs and results
-  // added resetSolver('') function since other functions before modified version are covered here
+  // Puts a new function 
   const newFunction = () => {
-    // Reset everything - both inputs and solver state
     resetSolver(); 
     setMinterms('');
     setVariables('');
   }
 
-  //[MODIFIED] - see inner comments for modifications
+  // Main solver function
   const solveQuineMcCluskey = () => {
-    resetSolver(); // Clear any previous results
+    // Always start fresh
+    resetSolver();
     
     try {
-      // ======================
-      // 1. INPUT VALIDATION
-      // ======================
+      // Ensures the inputs are correctly placed
       if (!minterms.trim()) {
         setError('Please enter minterms.');
         return;
@@ -73,20 +68,22 @@ export default function QuineMcCluskeySolver() {
         return;
       }
 
+      // Validates minterm format - numbers and commas only
       const validMinterms = /^[\d,]+$/;
       if (!validMinterms.test(minterms.trim())) {
         setError("Minterms should only be valid integers and no spaces.");
         return;
       }
 
+      // Only letters allowed for variables
       const validVariables = /^[\A-Za-z]+$/;
       if (!validVariables.test(variables.trim())) {
         setError("Variables should only be valid English alphabet letters and no spaces.");
         return;
       }
   
+      // Converts to uppercase and check for duplicates
       const variableList = variables.toUpperCase().trim().split('');
-      
       const uniqueVariables = new Set(variableList); 
       if (uniqueVariables.size !== variableList.length) {
         setError("Variables shoud be unique. Please remove any duplicate letters.");
@@ -98,60 +95,53 @@ export default function QuineMcCluskeySolver() {
         return;
       }
   
-      // Parse and validate minterms
+      // Processes minterms input into a numeric array
       const mintermList = minterms.split(',')
         .map(term => parseInt(term.trim(), 10))
-        .filter(term => !isNaN(term)); // [MODIFICATION] - added functionality to remove NaN values
+        .filter(term => !isNaN(term)); // gets rid of any non-numbers
   
-      if (mintermList.length === 0) { // [MODIFICATION] - came from some(isNaN), changed to length === 0 for clarity
+      // Makes sure that there are no invalid numbers
+      if (mintermList.length === 0) {
         setError('Invalid minterms. Please enter comma-separated numbers.');
         return;
       }
   
-      // ======================
-      // 2. MAXTERM CALCULATION
-      // ======================
+      // Figures out what the maxterms should be
       const numVars = variableList.length;
       const maxPossibleValue = Math.pow(2, numVars) - 1;
       
-      // Check minterm range validity
+      // Checks if all minterms are within valid range for the given number of variables
       if (mintermList.some(t => t < 0 || t > maxPossibleValue)) {
         setError(`With ${numVars} variables, minterms must be between 0 and ${maxPossibleValue}.`);
         return;
       }
   
-      // Calculate maxterms (complement of minterms)
+      // Generates the maxterms list (all possible values minus the minterms)
       const allTerms = Array.from({ length: maxPossibleValue + 1 }, (_, i) => i);
       const maxtermList = allTerms.filter(term => !mintermList.includes(term));
       setMaxterms(maxtermList);
-  
-      // ======================
-      // 3. QUINE-MCCLUSKEY ALGORITHM STEPS
-      // ======================
-
-      //[MODIFICATION]: removed intermediate variable posTermBinary
-      // Step 1: Convert to binary and group by number of ones
+      
+      // Step 1: Converts maxterms to binary and group them
       const binaryTerms = convertMaxtermsToBinary(maxtermList, numVars);
       const groups = groupByOnes(binaryTerms);
       
-      // Step 2: Find prime implicants
+      // Step 2: Finds all prime implicants
       const primeImplicants = findPrimeImplicants(groups);
       
-      // Step 3: Create prime implicant chart
+      // Step 3: Builds the prime implicant chart
       const chart = createPrimeImplicantChart(primeImplicants, maxtermList);
       
-      // Step 4: Find essential prime implicants
+      // Step 4: Finds essential prime implicants 
       const essentialPIs = findEssentialPrimeImplicants(chart, maxtermList);
       
-      // Step 5: Convert to algebraic POS form
+      // Step 5: Converts to readable algebraic form
       const algebraicTerms = essentialPIs.map(pi => (
         binaryToAlgebraic(pi.term, variableList.slice(0, numVars))
       ));
+      // Joins with dot operator for POS form
       const posExpression = algebraicTerms.map(term => `(${term})`).join(' · ');
   
-      // ======================
-      // 4. STORE RESULTS
-      // ======================
+      // Stores everything for display
       setResults({
         groups,
         binaryTerms,
@@ -163,9 +153,10 @@ export default function QuineMcCluskeySolver() {
         variableList
       });
       
-      setCurrentStep(1); // Begin with step 1 displayed
+      // Shows the first step by default
+      setCurrentStep(1);
       
-    } catch (err) { //[MODIFICATION] - added try-catch block for easier debugging
+    } catch (err) {
       setError(`An error occurred: ${err.message}`);
       console.error('Quine-McCluskey Error:', err);
     }
@@ -185,12 +176,14 @@ export default function QuineMcCluskeySolver() {
         clearInput={clearInput}
       />
       
+      {/* Show errors if any */}
       {error && (
         <div className="error-message">
           {error}
         </div>
       )}
       
+      {/* Show results */}
       {results && (
         <ResultsDisplay
           results={results}
